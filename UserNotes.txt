@@ -1,0 +1,8 @@
+#remove "Whoops! We seem to have hit a snag. Please try again later"
+app/config/root/production.php file and update ini_set('display_errors', '1');
+open .env file and update # CI_ENVIRONMENT = production to  CI_ENVIRONMENT = development
+
+#remove public from URL in CI4
+move index.php & .htaccess files from public folder to root folder 
+open index.php and update $pathsPath = realpath(FCPATH . 'app/Config/Paths.php');
+open config/app.php and update public $indexPage = '';
