@@ -13,6 +13,7 @@
 </head>
 <body>
 <div class="container mt-5">
+<?php include "header.php"; ?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -56,7 +57,7 @@
 					<input type="hidden" class="form-control" id="student_id" name="student_id" value="<?php echo $students['id']; ?>">
 				</div>       
 				<button type="submit" class="btn btn-primary">Submit</button>
-				<a href="<?php echo BASE_URL?>" class="btn btn-secondary">Cancel</a> 
+				<a href="<?php echo BASE_URL?>listing" class="btn btn-secondary">Cancel</a> 
 			    </form>
 				
 				

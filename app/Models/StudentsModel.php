@@ -12,6 +12,17 @@ class StudentsModel extends Model {
         $result =  $builder->get()->getResultArray();		
         return $result;	
 	}
+	
+	public function check_login($post){		
+		
+		$builder = $this->db->table('admin');
+        $builder->select("*");
+        $builder->where(['username'=>$post['username'],'password'=>$post['password']]);
+        $result =  $builder->get()->getLastRow('array');		
+		//echo $this->db->getLastQuery();die;
+        return $result;	
+	}
+	
 
 	public function edit_data($id){		
 		

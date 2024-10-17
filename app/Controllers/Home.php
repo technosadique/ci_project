@@ -14,16 +14,54 @@ class Home extends BaseController
 	{	// hello();
 	    $data=[];
 	    $model=new StudentsModel();
+		//print_r($_POST); die;
+		if(isset($_POST) && $_POST['username'] !='' && $_POST['password'] !=''){
+			
+			$check_credential=$model->check_login($_POST);
+			//print_r($check_credential); die;
+			if(isset($check_credential) && count($check_credential) > 0){
+				$_SESSION['username'] = $check_credential['username'];
+				
+				return redirect()->to(BASE_URL.'listing');exit;
+			}
+			else{
+				session()->setFlashdata('error', 'Wrong username/password!');
+				return redirect()->to(BASE_URL);exit;
+			}
+			
+			
+			
+		}
+		
+		
+		return view('login-view',$data);
+	}
+	
+	public function listing()
+	{	// hello();
+	
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
+	
+	    $data=[];
+	    $model=new StudentsModel();
 		$data['students']=$model->get_students();
 		return view('home-view',$data);
 	}
 	
 	
-	public function add_student(){ 		
+	public function add_student(){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		return view('student-add');
 	}
 	
 	public function save_data(){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		$post = $_POST;		
 		$model=new StudentsModel();
 		
@@ -52,6 +90,9 @@ class Home extends BaseController
 	
 	
 	public function update_data(){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		$post = $_POST;		
 		$model=new StudentsModel();		
 		$check=$this->validate(
@@ -74,7 +115,10 @@ class Home extends BaseController
 		return redirect()->to(BASE_URL);exit;
 	}
 	
-	public function edit($id = null){ 
+	public function edit($id = null){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		$data=[];
 		$model=new StudentsModel();
 		$data['students']=$model->edit_data($id);		
@@ -82,7 +126,10 @@ class Home extends BaseController
 		return view('student-edit',$data);
 	}
 	
-	public function remove($id = null){ 
+	public function remove($id = null){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		
 		$model=new StudentsModel();
 		$sid=$model->remove($id);
@@ -104,6 +151,9 @@ class Home extends BaseController
 	}
 	
 	public function generate_pdf(){
+		if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 
 		$model=new StudentsModel();
 		$data['students']=$model->get_students();		
@@ -118,7 +168,9 @@ class Home extends BaseController
 	}
 	
 	public function generate_csv(){
-
+        if(!$_SESSION['username']){
+			return redirect()->to(BASE_URL);exit;
+		}
 		$model=new StudentsModel();
 		$report_data=$model->get_students();		
 		$f = fopen('php://memory', 'w'); // Set header
@@ -141,6 +193,12 @@ class Home extends BaseController
 		header('Content-Disposition: attachment; filename="Student_Report' . '_' . date('dmy') . '.csv";');
 		fpassthru($f);	
 		
+	}
+	
+	public function logout()
+	{
+	    session()->remove('username');
+		return redirect()->to(BASE_URL);exit;
 	}
 	
 }
