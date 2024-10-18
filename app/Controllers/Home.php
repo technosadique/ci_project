@@ -52,7 +52,14 @@ class Home extends BaseController
 	
 	    $data=[];
 	    $model=new StudentsModel();
-		$data['students']=$model->get_students();
+		$sort = $this->request->getVar('sort') ?? 'id';
+        $order = $this->request->getVar('order') ?? 'asc';
+		
+		$data['students']=$model->orderBy($sort, $order)->paginate(5);
+		$data['pager'] = $model->pager;	
+		$data['sort'] = $sort;
+        $data['order'] = ($order === 'asc') ? 'desc' : 'asc';
+		
 		return view('home-view',$data);
 	}
 	
@@ -82,9 +89,15 @@ class Home extends BaseController
 		
 		if(!$check){ 
 			return view('student-add',['validation'=>$this->validator]);
-		}		
+		}
 		
-		$sid=$model->save_data($post);
+		$model->save([
+            'fname' => $this->request->getPost('fname'),
+            'lname' => $this->request->getPost('lname'),
+            'class' => $this->request->getPost('class'),
+            'section' => $this->request->getPost('section'),
+        ]);
+		
 		if($post['student_id'] == ''){ 
 		session()->setFlashdata('message', 'Added successfully.');
 		}
@@ -110,13 +123,19 @@ class Home extends BaseController
 			]
 		);
 		
-		if(!$check){ 
-		$data['students']=$model->edit_data($post['student_id']);	
+		if(!$check){ 		
+		$data['students'] = $model->find($post['student_id']);
 		$data['validation']=$this->validator;
 		return view('student-edit',$data);			
 		}		
 		
-		$sid=$model->save_data($post);		
+		$model->update($post['student_id'], [
+            'fname' => $this->request->getPost('fname'),
+            'lname' => $this->request->getPost('lname'),
+            'class' => $this->request->getPost('class'),
+            'section' => $this->request->getPost('section'),
+        ]);
+		
 		session()->setFlashdata('message', 'Updated successfully.');		
 		return redirect()->to(BASE_URL.'listing');exit;
 	}
@@ -126,8 +145,8 @@ class Home extends BaseController
 			return redirect()->to(BASE_URL);exit;
 		}
 		$data=[];
-		$model=new StudentsModel();
-		$data['students']=$model->edit_data($id);		
+		$model=new StudentsModel();		
+		$data['students'] = $model->find($id);
 		
 		return view('student-edit',$data);
 	}
@@ -135,10 +154,10 @@ class Home extends BaseController
 	public function remove($id = null){ 
 		if(!$_SESSION['username']){
 			return redirect()->to(BASE_URL);exit;
-		}
+		}		
+		$model=new StudentsModel();		
+		$model->delete($id);
 		
-		$model=new StudentsModel();
-		$sid=$model->remove($id);
 		session()->setFlashdata('message', 'Deleted successfully.');
 		return redirect()->to(BASE_URL.'listing');exit;
 	}
@@ -162,7 +181,9 @@ class Home extends BaseController
 		}
 
 		$model=new StudentsModel();
-		$data['students']=$model->get_students();		
+		//$data['students']=$model->get_students();
+		$data['students']=$model->findAll();
+		
 		$html = view('sample-pdf-view',$data);   		
 		$mpdf =new \Mpdf\Mpdf(['default_font' => 'A_Nefel_Botan']);			
 	    $stylesheet = file_get_contents(BASE_URL.'public/assets/css/pdf.css'); // external css
@@ -178,7 +199,8 @@ class Home extends BaseController
 			return redirect()->to(BASE_URL);exit;
 		}
 		$model=new StudentsModel();
-		$report_data=$model->get_students();		
+		//$report_data=$model->get_students();	
+		$report_data=$model->findAll();
 		$f = fopen('php://memory', 'w'); // Set header
 		$seq = 1;
         $header = ['Sl No.', 'Name', 'Class', 'Section'];

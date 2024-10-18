@@ -38,12 +38,20 @@
                     </div>
 				<div class="card-body">
 				<table class="table table-bordered table-striped">
-				 <tr><th>Id</th><th>Name</th><th>Class</th><th>Section</th><th>Action</th></tr>
+				 <tr>
+				 <th><a href="?sort=id&order=<?= $order ?>">Id</a></th>
+				 <th><a href="?sort=fname&order=<?= $order ?>">Name</a></th>
+				 <th><a href="?sort=class&order=<?= $order ?>">Class</a></th>
+				 <th><a href="?sort=section&order=<?= $order ?>">Section</a></th>
+				 <th>Action</th>
+				 
+				 </tr>
 				 <?php foreach($students as $row){  ?>
 				 <tr><td><?php echo $row['id']?></td><td><?php echo $row['fname']?></td><td><?php echo $row['class']?></td><td><?php echo $row['section']?></td><td><a href="<?php echo BASE_URL?>home/edit/<?php echo $row['id'];?>">Edit</a> | <a href="<?php echo BASE_URL?>home/remove/<?php echo $row['id'];?>">Delete</a></td></tr>
 				 
 				 <?php } ?>
 				 </table>
+				 <?= $pager->links() ?>
 				</div>
 				
 			</div>

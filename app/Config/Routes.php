@@ -37,6 +37,7 @@ $routes->post('/save_data', 'Home::save_data');
 $routes->post('/update_data', 'Home::update_data');
 $routes->get('/generate_pdf', 'Home::generate_pdf');
 $routes->get('/generate_csv', 'Home::generate_csv');
+$routes->get('/home/edit/(:num)', 'Home::edit/$1');
 
 
 /**
