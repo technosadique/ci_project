@@ -9,6 +9,7 @@ class StudentsModel extends Model {
 		
 		$builder = $this->db->table('students');
         $builder->select("*");
+        $builder->where(['in_deleted'=>0]);
         $result =  $builder->get()->getResultArray();		
         return $result;	
 	}
@@ -42,22 +43,8 @@ class StudentsModel extends Model {
             $builder->update(['in_deleted' => 1]);           
             echo "success";
         }
-    }
+    }  
    
-    public function bulkdeletecustomer($post)
-    {
-        $idArr = explode(',', $post['selectedid']);
-        foreach ($idArr as $key => $id) {
-            if ($idArr[$key] != '') {
-                $data = array("in_deleted" => 1, "id" => $id);                                
-                // Delete in mysql db
-                $builder = $this->db->table('customers');
-                $builder->where(['id' => $id]);
-                $builder->update($data);
-            }
-        }
-        return 1;
-    }
 
 	public function save_data($post) {	
             
@@ -91,10 +78,12 @@ class StudentsModel extends Model {
 	}	
 	
 	
-	public function remove($id) {           
+	public function remove($id) {
+		
+			$data=['in_deleted'=>1];
 			$builder = $this->db->table('students');
 			$builder->where('id', $id);
-			$builder->delete(); 
+			$builder->update($data); 
 			return 1;	   
 	}	
 }

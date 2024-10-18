@@ -91,7 +91,7 @@ class Home extends BaseController
 		else{
 		session()->setFlashdata('message', 'Updated successfully.');
 		}
-		return redirect()->to(BASE_URL);exit;
+		return redirect()->to(BASE_URL.'listing');exit;
 	}
 	
 	
@@ -118,7 +118,7 @@ class Home extends BaseController
 		
 		$sid=$model->save_data($post);		
 		session()->setFlashdata('message', 'Updated successfully.');		
-		return redirect()->to(BASE_URL);exit;
+		return redirect()->to(BASE_URL.'listing');exit;
 	}
 	
 	public function edit($id = null){
@@ -132,7 +132,7 @@ class Home extends BaseController
 		return view('student-edit',$data);
 	}
 	
-	public function remove($id = null){
+	public function remove($id = null){ 
 		if(!$_SESSION['username']){
 			return redirect()->to(BASE_URL);exit;
 		}
@@ -140,7 +140,7 @@ class Home extends BaseController
 		$model=new StudentsModel();
 		$sid=$model->remove($id);
 		session()->setFlashdata('message', 'Deleted successfully.');
-		return redirect()->to(BASE_URL);exit;
+		return redirect()->to(BASE_URL.'listing');exit;
 	}
 	
 	public function send_email(){ 
@@ -153,7 +153,7 @@ class Home extends BaseController
 		
 		print_r($status); die;
 		session()->setFlashdata('message', 'Email Sent successfully.');
-		return redirect()->to(BASE_URL);exit;
+		return redirect()->to(BASE_URL.'listing');exit;
 	}
 	
 	public function generate_pdf(){
