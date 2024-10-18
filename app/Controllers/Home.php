@@ -8,11 +8,17 @@ class Home extends BaseController
 	public function __construct(){
 		$session = \Config\Services::session();		
 		$validation = \Config\Services::validation();		
-		helper(['url', 'form', 'custom','custom_email']);			
+		helper(['url', 'form', 'custom','custom_email','my_helper']);			
 	}
 	public function index()
 	{	// hello();
 	    $data=[];
+		
+		//fetch data from helper 
+		//$student_detail = get_single_row_helper("students", "*", "in_deleted=0 and id='19'");
+		//$student_data = get_list_helper('students', "*", "in_deleted=0");
+		//print_r($student_data); die;
+		
 	    $model=new StudentsModel();
 		//print_r($_POST); die;
 		if(isset($_POST) && $_POST['username'] !='' && $_POST['password'] !=''){
