@@ -33,9 +33,7 @@ class Home extends BaseController
 			else{
 				session()->setFlashdata('error', 'Wrong username/password!');
 				return redirect()->to(BASE_URL);exit;
-			}
-			
-			
+			}	
 			
 		}
 		
@@ -44,7 +42,7 @@ class Home extends BaseController
 	}
 	
 	public function listing()
-	{	// hello();
+	{	
 	
 		if(!$_SESSION['username']){
 			return redirect()->to(BASE_URL);exit;
@@ -75,7 +73,8 @@ class Home extends BaseController
 		if(!$_SESSION['username']){
 			return redirect()->to(BASE_URL);exit;
 		}
-		return view('student-add');
+		$data['title'] = 'Add Student';
+		return view('student-add',$data);
 	}
 	
 	public function save_data(){
@@ -154,7 +153,7 @@ class Home extends BaseController
 		$data=[];
 		$model=new StudentsModel();		
 		$data['students'] = $model->find($id);
-		
+		$data['title'] = 'Edit Student';
 		return view('student-edit',$data);
 	}
 	
