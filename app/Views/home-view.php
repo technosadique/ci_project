@@ -1,15 +1,5 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Listing</title>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-5">
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 <?php include "header.php"; ?>
 	<div class="row">
 		<div class="col-md-12">
@@ -37,6 +27,15 @@
                         </h4>
                     </div>
 				<div class="card-body">
+				<form method="get" action="" class="mb-3">
+					<div class="input-group col-sm-4">
+						<input type="text" name="search" class="form-control" value="<?= esc($search) ?>" placeholder="Search...">
+						<div class="input-group-append">
+							<button class="btn btn-primary" type="submit">Search</button>
+						</div>
+					</div>
+				</form>
+
 				<table class="table table-bordered table-striped">
 				 <tr>
 				 <th><a href="?sort=id&order=<?= $order ?>">Id</a></th>
@@ -47,20 +46,25 @@
 				 
 				 </tr>
 				 <?php foreach($students as $row){  ?>
-				 <tr><td><?php echo $row['id']?></td><td><?php echo $row['fname']?></td><td><?php echo $row['class']?></td><td><?php echo $row['section']?></td><td><a href="<?php echo BASE_URL?>home/edit/<?php echo $row['id'];?>">Edit</a> | <a href="<?php echo BASE_URL?>home/remove/<?php echo $row['id'];?>">Delete</a></td></tr>
+				 <tr><td><?php echo $row['id']?></td><td><?php echo $row['fname']?></td><td><?php echo $row['class']?></td><td><?php echo $row['section']?></td><td><a class="badge btn-primary" href="<?php echo BASE_URL?>home/edit/<?php echo $row['id'];?>">Edit</a> <a class="badge btn-danger" href="<?php echo BASE_URL?>home/remove/<?php echo $row['id'];?>" onclick="return confirm('Are you sure, you want to delete this?');">Delete</a></td></tr>
 				 
 				 <?php } ?>
 				 </table>
-				 <?= $pager->links() ?>
+				 <!-- Bootstrap Pagination -->
+				 <?= $pager->links(); ?>
+				 <?php /* ?>
+				<nav>
+					<ul class="pagination">
+					
+						<li class="page-item"><a class="page-link" href="<?php echo BASE_URL?>listing?page=1">1</a></li>
+						<li class="page-item"><a class="page-link" href="<?php echo BASE_URL?>listing?page=2">2</a></li>   
+						<li class="page-item"><a class="page-link" href="<?php echo BASE_URL?>listing?page=2">Next</a></li>
+					</ul>
+				</nav>
+				<?php */  ?>
 				</div>
 				
 			</div>
 		</div>
 	</div>
-</div>
-
-</body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</html>
+<?= $this->endSection() ?>

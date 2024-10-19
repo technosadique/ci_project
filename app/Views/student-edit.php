@@ -1,18 +1,5 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit</title>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-	<style>
-	.help-block{color:red;}
-	</style>
-</head>
-<body>
-<div class="container mt-5">
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 <?php include "header.php"; ?>
 	<div class="row">
 		<div class="col-md-12">
@@ -66,8 +53,4 @@
 			</div>
 		</div>
 	</div>
-</div>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js">
-</html>
+<?= $this->endSection() ?>

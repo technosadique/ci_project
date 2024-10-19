@@ -52,10 +52,17 @@ class Home extends BaseController
 	
 	    $data=[];
 	    $model=new StudentsModel();
+		$search = $this->request->getVar('search');
 		$sort = $this->request->getVar('sort') ?? 'id';
         $order = $this->request->getVar('order') ?? 'asc';
 		
-		$data['students']=$model->orderBy($sort, $order)->paginate(5);
+		if($search !=''){
+		$data['students']=$model->orderBy($sort, $order)->where('fname',$search)->paginate(5);
+		}
+		else{
+		$data['students']=$model->orderBy($sort, $order)->paginate(5);	
+		}
+		
 		$data['pager'] = $model->pager;	
 		$data['sort'] = $sort;
         $data['order'] = ($order === 'asc') ? 'desc' : 'asc';
