@@ -1,6 +1,9 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 <?php include "header.php"; ?>
+
+
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -11,7 +14,7 @@
                     </div>
 				<div class="card-body">
 				
-				<form method="post" action="<?php echo BASE_URL?>update_data">
+				<form method="post" action="<?php echo BASE_URL?>update_data" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input type="text" class="form-control" id="fname" name="fname" value="<?php echo $students['fname']; ?>" placeholder="Enter your first name" >
@@ -42,7 +45,18 @@
 					<span><?php echo $validation->showError('section')  ?></span>
 					<?php } ?>
 					<input type="hidden" class="form-control" id="student_id" name="student_id" value="<?php echo $students['id']; ?>">
-				</div>       
+				</div> 
+
+				<div class="form-group" <?php echo ($students['doc'])?'':'hidden' ?> >
+					<label for=""></label>
+					<img src="<?php echo $imageUrl ?>" width="100" height="100">				
+				</div>
+				
+				<div class="form-group">
+					<label for="section">Upload Image</label>
+					<input type="file" class="form-control" id="image" name="image">					
+				</div>
+				
 				<button type="submit" class="btn btn-primary">Submit</button>
 				<a href="<?php echo BASE_URL?>listing" class="btn btn-secondary">Cancel</a> 
 			    </form>

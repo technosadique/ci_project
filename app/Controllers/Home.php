@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 use App\Models\StudentsModel;
+use CodeIgniter\Files\File;
 use Mpdf\Mpdf;
 
 class Home extends BaseController
@@ -89,27 +90,35 @@ class Home extends BaseController
 				'fname'=>'required',
 				'lname'=>'required',
 				'class'=>'required',
-				'section'=>'required',		
+				'section'=>'required',	
+				'image' => [
+                'rules' => 'uploaded[image]|is_image[image]|max_size[image,2048]|mime_in[image,image/jpg,image/jpeg,image/png]',
+                'label' => 'Image'
+				]
 			]
 		);
 		
 		if(!$check){ 
 			return view('student-add',['validation'=>$this->validator]);
 		}
+		// Get the uploaded file
+        $file = $this->request->getFile('image');
+		// Move the file to a directory (e.g., public/uploads)
+		$uploadPath = 'public/uploads/';
+		$fileName = $file->getRandomName();
+		$file->move($uploadPath, $fileName);
 		
 		$model->save([
             'fname' => $this->request->getPost('fname'),
             'lname' => $this->request->getPost('lname'),
             'class' => $this->request->getPost('class'),
             'section' => $this->request->getPost('section'),
+            'doc' => $fileName,
         ]);
 		
 		if($post['student_id'] == ''){ 
 		session()->setFlashdata('message', 'Added successfully.');
-		}
-		else{
-		session()->setFlashdata('message', 'Updated successfully.');
-		}
+		}		
 		return redirect()->to(BASE_URL.'listing');exit;
 	}
 	
@@ -133,14 +142,36 @@ class Home extends BaseController
 		$data['students'] = $model->find($post['student_id']);
 		$data['validation']=$this->validator;
 		return view('student-edit',$data);			
-		}		
+		}	
+
+		// Get the uploaded file
+        $file = $this->request->getFile('image');
+		if($file !=''){
+		// Move the file to a directory (e.g., public/uploads)
+		$uploadPath = 'public/uploads/';
+		$fileName = $file->getRandomName();
+		$file->move($uploadPath, $fileName);
+		}
 		
+		if($fileName !=''){
 		$model->update($post['student_id'], [
             'fname' => $this->request->getPost('fname'),
             'lname' => $this->request->getPost('lname'),
             'class' => $this->request->getPost('class'),
             'section' => $this->request->getPost('section'),
+			'doc' => $fileName,
         ]);
+		}
+		else{
+			$model->update($post['student_id'], [
+            'fname' => $this->request->getPost('fname'),
+            'lname' => $this->request->getPost('lname'),
+            'class' => $this->request->getPost('class'),
+            'section' => $this->request->getPost('section'),			
+        ]);
+		}
+		
+		
 		
 		session()->setFlashdata('message', 'Updated successfully.');		
 		return redirect()->to(BASE_URL.'listing');exit;
@@ -153,6 +184,8 @@ class Home extends BaseController
 		$data=[];
 		$model=new StudentsModel();		
 		$data['students'] = $model->find($id);
+		$imageUrl=base_url('public/uploads/' . $data['students']['doc']);
+		$data['imageUrl'] = $imageUrl;
 		$data['title'] = 'Edit Student';
 		return view('student-edit',$data);
 	}

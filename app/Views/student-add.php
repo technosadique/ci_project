@@ -11,7 +11,7 @@
                     </div>
 				<div class="card-body">
 				
-				<form method="post" action="<?php echo BASE_URL?>save_data">
+				<form method="post" action="<?php echo BASE_URL?>save_data" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input type="text" class="form-control" id="fname" name="fname" placeholder="Enter your first name">
@@ -40,7 +40,14 @@
 					<?php if(isset($validation) && $validation->hasError('section')){  ?>
 					<span><?php echo $validation->showError('section')  ?></span>
 					<?php } ?>
-				</div>       
+				</div> 
+
+				<div class="form-group">
+					<label for="section">Upload Image</label>
+					<input type="file" class="form-control" id="image" name="image">
+					
+				</div>
+				
 				<button type="submit" class="btn btn-primary">Submit</button> 
 				<a href="<?php echo BASE_URL?>listing" class="btn btn-secondary">Cancel</a> 
 			    </form>

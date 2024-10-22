@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class StudentsModel extends Model {
     protected $table = 'students';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['fname', 'lname', 'class', 'section'];
+    protected $allowedFields = ['fname', 'lname', 'class', 'section','doc'];
 	
 	
 	public function check_login($post){		

@@ -39,14 +39,24 @@
 				<table class="table table-bordered table-striped">
 				 <tr>
 				 <th><a href="?sort=id&order=<?= $order ?>">Id</a></th>
+				 <th>Image</th>
 				 <th><a href="?sort=fname&order=<?= $order ?>">Name</a></th>
 				 <th><a href="?sort=class&order=<?= $order ?>">Class</a></th>
 				 <th><a href="?sort=section&order=<?= $order ?>">Section</a></th>
 				 <th>Action</th>
 				 
 				 </tr>
-				 <?php foreach($students as $row){  ?>
-				 <tr><td><?php echo $row['id']?></td><td><?php echo $row['fname']?></td><td><?php echo $row['class']?></td><td><?php echo $row['section']?></td><td><a class="badge btn-primary" href="<?php echo BASE_URL?>home/edit/<?php echo $row['id'];?>">Edit</a> <a class="badge btn-danger" href="<?php echo BASE_URL?>home/remove/<?php echo $row['id'];?>" onclick="return confirm('Are you sure, you want to delete this?');">Delete</a></td></tr>
+				 <?php foreach($students as $row){
+				$imageUrl = BASE_URL.'public/uploads/'.$row['doc'];
+				$img="<img src=".$imageUrl." width='50' height='50'>";
+				$img=($row['doc'] !='')?$img:'';
+				
+					 ?>
+				 <tr>				 
+				 <td><?php echo $row['id']?></td>
+				 <td><?php echo $img; ?></td>				 
+				 
+				 <td><?php echo $row['fname']?></td><td><?php echo $row['class']?></td><td><?php echo $row['section']?></td><td><a class="badge btn-primary" href="<?php echo BASE_URL?>home/edit/<?php echo $row['id'];?>">Edit</a> <a class="badge btn-danger" href="<?php echo BASE_URL?>home/remove/<?php echo $row['id'];?>" onclick="return confirm('Are you sure, you want to delete this?');">Delete</a></td></tr>
 				 
 				 <?php } ?>
 				 </table>
